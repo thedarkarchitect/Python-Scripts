@@ -24,7 +24,7 @@ data_dict ={
 #makes the dataframe 
 new_data = pd.DataFrame(data_dict)
 
-# another way
+# another way/best
 # grey_squirrel_count = len(data[data["Primary Fur Color"] == "Gray"])
 # red_squirrel_count = len(data[data["Primary Fur Color"] == "Cinnamon"])
 # black_squirrel_count = len(data[data["Primary Fur Color"] == "Black"])
