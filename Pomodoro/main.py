@@ -61,10 +61,11 @@ def count_down(count):
     if count > 0:
         global timer
         #after(time in seconds to wait, function to run , argument of function action)
-        timer = window.after(30, count_down, count-1)
+        timer = window.after(1000, count_down, count-1)
     else:
         start_timer()
         mark=""
+        #2 reps are one complete work session
         work_sessions = math.floor(reps/2)
         #This will always loop the number of work sessions and add marks to the empty mark variable
         for _ in range(work_sessions):
@@ -79,24 +80,27 @@ window.config(padx=50, pady=50, bg=YELLOW)
 #highlighthickness takes away the line on the edge of the tomato image
 canvas = Canvas(width= 200, height=224, bg=YELLOW, highlightthickness=0)
 #photo to be added to the canvas using PhotoImage class
-red_img = PhotoImage(file="Pomodoro\Tomato.png")
+veg_img = PhotoImage(file="Pomodoro\Tomato.png")
 #use methods create_image() and create_text() to add text and image to canvas
-canvas.create_image(100, 112, image=red_img)
+canvas.create_image(100, 112, image=veg_img)
 #change somthingin the canvas you must use itemconfig on a variable that contains element of canvas
 timer_text = canvas.create_text(103, 130, text="00:00", fill="white", font=(FONT_NAME, 35, "bold"))
 canvas.grid(row=1, column = 1)
 
+#The fg changes the color of the text of the label 
 timer_label = Label(text="Timer", font=(FONT_NAME, 40, "bold"), fg=GREEN, bg=YELLOW)
 timer_label.grid(row=0, column=1)
 
+#This starts with no text to recieve check marks after a work session
 check_label = Label(fg=GREEN, bg=YELLOW)
 check_label.grid(row=3, column=1)
 
+#This button starts the clock/count down 
 start_button = Button(text="Start", highlightthickness=0, command=start_timer)
 start_button.grid(row=2, column=0)
 
+#This resets the clock of the GUI
 reset_button = Button(text="Reset",  highlightthickness=0, command=reset_timer)
 reset_button.grid(row=2, column=2)
-
 
 window.mainloop()
