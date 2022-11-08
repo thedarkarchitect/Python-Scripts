@@ -31,14 +31,28 @@ data = {row.letter : row.code for (index, row) in csv_data.iterrows()}
 #TODO 2. Create a list of the phonetic code words from a word that the user inputs.
 #Catch exceptions for numbers typed
 is_ok = True
-while is_ok:
-    try:
-        name = input("Enter a name: ")
-        result = [data[letter.upper()] for letter in name]
-    except KeyError:
-        print("Sorry, only letters in the alphabet please")
+# while is_ok:
+#     try:
+#         name = input("Enter a name: ")
+#         result = [data[letter.upper()] for letter in name]
+#     except KeyError:
+#         print("Sorry, only letters in the alphabet please")
 
+#     else:
+#         print(result)
+#         #if the result is printed then the while loop will end
+#         is_ok = False
+
+#use the rescussion
+def generate_phonetic():
+    name = input("Enter a word: ").upper()
+    try:
+        result = [data[letter] for letter in name]
+    except KeyError:
+        print("Sorry, only letters in the alphabet please.")
+        #Here recussion is used to make the function call itself after the except is hit
+        generate_phonetic()
     else:
         print(result)
-        #if the result is printed then the while loop will end
-        is_ok = False
+
+generate_phonetic()
