@@ -3,8 +3,8 @@ from tkinter import *
 #import a another class
 from tkinter import messagebox
 from random import choice, randint, shuffle
+import json
 #THis auto copy's to the clipboard so the password can be used anytime after being generated
-# s
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 def password_generator():
@@ -42,19 +42,54 @@ def save_data():
     email = email_entry.get()
     password = password_entry.get()
 
+    #This is the dictionary that will always contain data
+    new_data ={
+        website:{
+            "email":email,
+            "password":password
+        } ,
+    }
+
     if len(website) == 0 or len(password) == 0:
         #Showinfo is the way you send a reminder to the user.
         messagebox.showinfo(title="Oops", message="Please don't leave any fields empty! ")
-    else:
-        is_ok = messagebox.askokcancel(title=website, message=f"There are the details entered: \nEmail: {email} "
-                                                                f"\nPassword: {password} \nIs it ok to save?")
+    else: 
+        try:
+            with open("Password\data.json", "r") as file:
+                #Reading old data
+                data = json.load(file)
 
-        #This controls the entries field acceptance for better user interface
-        if is_ok:#This returns a boolean    
-            with open("Password\data.txt", mode="a") as file:
-                file.write(f"{website} | {email} | {password}\n")
-                web_entry.delete(0, END)
-                password_entry.delete(0, END)
+        except FileNotFoundError:
+            with open("Password\data.json", "w") as file:
+                data = json.dump(new_data, file, indent=4)
+
+        else:
+            #updating the old data with new data
+            data.update(new_data)
+
+            with open("Password\data.json", "w") as file:
+                #opens the file in write mode
+                #Then the dump method sends the new_Data json to the file (data.json)
+                #saving the updated data
+                json.dump(data, file, indent=4)
+
+        finally:
+            web_entry.delete(0, END)
+            password_entry.delete(0, END)
+
+#--------------------------search--------------------------------------------#
+def search_json():
+    try: 
+        with open("Password/data.json", mode="r") as data_file:
+            data = json.load(data_file)
+            web = web_entry.get()
+
+    except FileNotFoundError:
+        messagebox.showerror(title="Error", message="No Data File Found")
+
+    else:
+        messagebox.showinfo(title=web, message=f"Email: {data[web]['email']}\n Password:{data[web]['password']}")  
+
 
 
 # ---------------------------- UI SETUP ------------------------------- #
@@ -79,8 +114,8 @@ password_label = Label(text="Password: ", font=("Arial", 10, "normal"))
 password_label.grid(column=0, row=3)
 
 #Entry
-web_entry = Entry(width=35)
-web_entry.grid(column=1, row=1, columnspan=2)
+web_entry = Entry(width=25)
+web_entry.grid(column=1, row=1, )
 #this makes the cusor start at the web entry field
 web_entry.focus()
 
@@ -99,4 +134,6 @@ generate_button.grid(column=2, row=3)
 add_button = Button(text="Add", width=36, command=save_data, highlightthickness=0)
 add_button.grid(column=1, row=4, columnspan=2)
 
+search_button = Button(text="Search", command=search_json ,highlightthickness = 0)
+search_button.grid(column=2, row=1)
 window.mainloop()
